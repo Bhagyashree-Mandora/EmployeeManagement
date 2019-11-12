@@ -38,7 +38,10 @@ namespace EmployeeManagement
             {
                 id = em.id,
                 name = em.name,
-                address = em.address,
+                email = em.email,
+                position = em.position.name,
+                department = em.department.name,
+                employmentStatus = em.employment_status,
             };
             
             EmployeeListDataGrid.ItemsSource = query.ToList();
@@ -47,7 +50,7 @@ namespace EmployeeManagement
         private void ViewDetailsHandler(object sender, MouseButtonEventArgs e)
         {
             EmployeeListItem em = (EmployeeListItem)this.EmployeeListDataGrid.SelectedItem;
-            EmployeeDetails employeeDetails = new EmployeeDetails(em.name);
+            EmployeeDetails employeeDetails = new EmployeeDetails(em.id);
             this.NavigationService.Navigate(employeeDetails);
         }
 
@@ -55,7 +58,10 @@ namespace EmployeeManagement
         {
             public int id { get; set; }
             public string name { get; set; }
-            public string address { get; set; }
+            public string email { get; set; }
+            public string employmentStatus { get; set; }
+            public string department { get; set; }
+            public string position { get; set; }
 
             public EmployeeListItem() { }
           

@@ -15,7 +15,58 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" >
+        <Label Grid.Row="0" />
+
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" >Employee ID:</Label>
+            <Label Grid.Row="0" Grid.Column="1" Name="idLabel" />
+            <Label Grid.Row="1" Grid.Column="0" >Name:</Label>
+            <Label Grid.Row="1" Grid.Column="1" Name="nameLabel" />
+            <Label Grid.Row="2" Grid.Column="0">Address:</Label>
+            <Label Grid.Row="2" Grid.Column="1" Name="addressLabel" />
+            <Label Grid.Row="3" Grid.Column="0">Email:</Label>
+            <Label Grid.Row="3" Grid.Column="1" Name="emailLabel" />
+            <Label Grid.Row="4" Grid.Column="0">Contact:</Label>
+            <Label Grid.Row="4" Grid.Column="1" Name="contactLabel" />
+            <Label Grid.Row="5" Grid.Column="0">Position:</Label>
+            <Label Grid.Row="5" Grid.Column="1" Name="positionLabel" />
+            <Label Grid.Row="6" Grid.Column="0">Department:</Label>
+            <Label Grid.Row="6" Grid.Column="1" Name="departmentLabel" />
+            <Label Grid.Row="7" Grid.Column="0">Shift:</Label>
+            <Label Grid.Row="7" Grid.Column="1" Name="shiftLabel" />
+            <Label Grid.Row="8" Grid.Column="0">Manager:</Label>
+            <Label Grid.Row="8" Grid.Column="1" Name="managerLabel" />
+            <Label Grid.Row="9" Grid.Column="0">Start Date:</Label>
+            <Label Grid.Row="9" Grid.Column="1" Name="startDateLabel" />
+            <Label Grid.Row="10" Grid.Column="0">Employment Status:</Label>
+            <Label Grid.Row="10" Grid.Column="1" Name="employmentStatusLabel" />
+            <Label Grid.Row="11" Grid.Column="0">Favorite Color:</Label>
+            <Label Grid.Row="11" Grid.Column="1" Name="favoriteColorLabel" />
+
+        </Grid>
+
+        <Grid Grid.Row="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="120" />
@@ -28,27 +79,5 @@
             </Button>
         </Grid>
 
-        <Label Grid.Row="1">
-            Employee Details For:
-        </Label>
-
-        <Grid Grid.Row="2" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0" >Name:</Label>
-            <Label Grid.Row="0" Grid.Column="1" Name="nameLabel" />
-            <Label Grid.Row="1" Grid.Column="0">Address:</Label>
-            <Label Grid.Row="1" Grid.Column="1" Name="addressLabel" />
-
-        </Grid>
     </Grid>
 </Page>

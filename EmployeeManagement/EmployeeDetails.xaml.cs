@@ -25,21 +25,38 @@ namespace EmployeeManagement
         employee currentEmployee;
 
         hrEntities dbContext = new hrEntities();
-        //HrDbContext dbContext = new HrDbContext();
 
         public EmployeeDetails()
         {
             InitializeComponent();
         }
 
-        public EmployeeDetails(string name) : this()
+        public EmployeeDetails(int employeeId) : this()
         {
             currentEmployee = (from em in dbContext.employees
-                         where em.name == name
+                         where em.id == employeeId
                          select em).First();
+
+            string managerName = "";
+            if (currentEmployee.manager_id != null)
+            {
+                managerName = (from em in dbContext.employees
+                               where em.id == currentEmployee.manager_id
+                               select em).First().name;
+            } 
             
+            idLabel.Content = currentEmployee.id;
             nameLabel.Content = currentEmployee.name;
             addressLabel.Content = currentEmployee.address;
+            emailLabel.Content = currentEmployee.email;
+            contactLabel.Content = currentEmployee.phone;
+            positionLabel.Content = currentEmployee.position.name;
+            departmentLabel.Content = currentEmployee.department.name;
+            shiftLabel.Content = currentEmployee.shift;
+            managerLabel.Content = managerName;
+            startDateLabel.Content = currentEmployee.start_date;
+            employmentStatusLabel.Content = currentEmployee.employment_status;
+            favoriteColorLabel.Content = currentEmployee.favorite_color;
         }
 
         private void OnUpdateClick(object sender, RoutedEventArgs e)
@@ -49,13 +66,13 @@ namespace EmployeeManagement
 
             for (int i = 0; i < len; i++)
             {
-                if (String.Compare(currentEmployee.name, dbContext.employees.Local[i].name) == 0) {
+                if (currentEmployee.id == dbContext.employees.Local[i].id) {
                     pos = i;
                     break;
                 }
             }
 
-            currentEmployee.address = "xxx";
+            currentEmployee.address = "Provo";
             dbContext.employees.Local.Insert(pos, currentEmployee);
             MessageBox.Show("New address: " + currentEmployee.address);
             dbContext.SaveChanges();
@@ -63,7 +80,15 @@ namespace EmployeeManagement
 
         private void OnDeleteClick(object sender, RoutedEventArgs e)
         {
-            // dbContext.employee.Remove();
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure?", "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                dbContext.employees.Remove(currentEmployee);
+                dbContext.SaveChanges();
+            }
+
+            EmployeeList employeeList = new EmployeeList();
+            this.NavigationService.Navigate(employeeList);
         }
     }
 }
