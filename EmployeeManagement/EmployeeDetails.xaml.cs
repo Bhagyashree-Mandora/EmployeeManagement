@@ -79,8 +79,8 @@ namespace EmployeeManagement
             dbContext.SaveChanges();
             */
 
-            AddEmployee addEmployee = new AddEmployee(currentEmployee);
-            this.NavigationService.Navigate(addEmployee);
+            UpdateEmployee updateEmployee = new UpdateEmployee(currentEmployee, dbContext);
+            this.NavigationService.Navigate(updateEmployee);
         }
 
         private void OnDeleteClick(object sender, RoutedEventArgs e)
