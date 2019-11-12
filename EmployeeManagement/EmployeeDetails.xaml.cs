@@ -61,6 +61,7 @@ namespace EmployeeManagement
 
         private void OnUpdateClick(object sender, RoutedEventArgs e)
         {
+            /*
             int len = dbContext.employees.Local.Count();
             int pos = len;
 
@@ -76,6 +77,10 @@ namespace EmployeeManagement
             dbContext.employees.Local.Insert(pos, currentEmployee);
             MessageBox.Show("New address: " + currentEmployee.address);
             dbContext.SaveChanges();
+            */
+
+            AddEmployee addEmployee = new AddEmployee(currentEmployee);
+            this.NavigationService.Navigate(addEmployee);
         }
 
         private void OnDeleteClick(object sender, RoutedEventArgs e)
