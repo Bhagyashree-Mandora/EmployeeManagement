@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:EmployeeManagement"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Create/Update Employee">
+      Title="Add New Employee">
 
     <Grid>
         <Grid.RowDefinitions>

@@ -6,13 +6,14 @@
     <edmx:Diagrams>
       <Diagram DiagramId="b28fdb1a40c6436885c9bffb965bd034" Name="Diagram1">
         <EntityTypeShape EntityType="hrModel.department" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="hrModel.employee" Width="1.5" PointX="3" PointY="2.25" />
-        <EntityTypeShape EntityType="hrModel.log" Width="1.5" PointX="5.25" PointY="3.25" />
+        <EntityTypeShape EntityType="hrModel.employee" Width="1.5" PointX="3" PointY="2.125" />
+        <EntityTypeShape EntityType="hrModel.log" Width="1.5" PointX="5.25" PointY="3.125" />
         <EntityTypeShape EntityType="hrModel.position" Width="1.5" PointX="0.75" PointY="0.75" />
         <AssociationConnector Association="hrModel.FK__employees__depar__5535A963" />
         <AssociationConnector Association="hrModel.FK__employees__manag__5629CD9C" />
         <AssociationConnector Association="hrModel.FK__employees__posit__5441852A" />
         <AssociationConnector Association="hrModel.FK__logs__employee_i__628FA481" />
+        <AssociationConnector Association="hrModel.fk_employee" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

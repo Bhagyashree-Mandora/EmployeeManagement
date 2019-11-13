@@ -19,6 +19,7 @@ namespace EmployeeManagement
         {
             this.employees1 = new HashSet<employee>();
             this.logs = new HashSet<log>();
+            this.logs1 = new HashSet<log>();
         }
     
         public int id { get; set; }
@@ -43,5 +44,7 @@ namespace EmployeeManagement
         public virtual position position { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<log> logs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<log> logs1 { get; set; }
     }
 }

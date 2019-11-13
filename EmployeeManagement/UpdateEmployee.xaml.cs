@@ -22,6 +22,7 @@ namespace EmployeeManagement
     {
         hrEntities dbContext;
         employee currentEmployee;
+        string oldManagerName;
         List<log> UpdateLogs = new List<log>();
 
         public UpdateEmployee()
@@ -60,10 +61,16 @@ namespace EmployeeManagement
             favoriteColorTextBox.Text = currEmployee.favorite_color;
             if (currEmployee.manager_id.HasValue)
             {
-                managerComboBox.Text = (from em in dbContext.employees
-                                        where em.id == currEmployee.manager_id
-                                        select em.name + " - " + em.id).First();
+                oldManagerName = (from em in dbContext.employees
+                                  where em.id == currEmployee.manager_id
+                                  select em.name).First();
+                managerComboBox.Text = managerEntryFormat(oldManagerName, currEmployee.manager_id.Value);
             }
+        }
+
+        private string managerEntryFormat(string name, int id)
+        {
+            return name + " - " + id;
         }
 
         private log logEntry(string field, object oldVal, object newVal)
@@ -74,8 +81,8 @@ namespace EmployeeManagement
                 time = System.DateTime.Now,
                 change_type = "Update",
                 field_name = field,
-                old_value = oldVal.ToString(),
-                new_value = newVal.ToString(),
+                old_value = Convert.ToString(oldVal),
+                new_value = Convert.ToString(newVal),
             };
         }
 
@@ -97,34 +104,67 @@ namespace EmployeeManagement
                 entries.Add(logEntry("Email", currentEmployee.email, emailTextBox.Text));
                 currentEmployee.email = emailTextBox.Text;
             }
-            currentEmployee.phone = phoneTextBox.Text;
-            currentEmployee.employment_status = employmentStatusComboBox.Text;
-            currentEmployee.shift = shiftComboBox.Text;
-            currentEmployee.favorite_color = favoriteColorTextBox.Text;
-
+            if (!currentEmployee.phone.Equals(phoneTextBox.Text))
+            {
+                entries.Add(logEntry("Phone", currentEmployee.phone, phoneTextBox.Text));
+                currentEmployee.phone = phoneTextBox.Text;
+            }
+            if (!currentEmployee.employment_status.Equals(employmentStatusComboBox.Text))
+            {
+                entries.Add(logEntry("Employment Status", currentEmployee.employment_status, employmentStatusComboBox.Text));
+                currentEmployee.employment_status = employmentStatusComboBox.Text;
+            }
+            if (!currentEmployee.shift.Equals(shiftComboBox.Text))
+            {
+                entries.Add(logEntry("Shift", currentEmployee.shift, shiftComboBox.Text));
+                currentEmployee.shift = shiftComboBox.Text;
+            }
+            if (!currentEmployee.favorite_color.Equals(favoriteColorTextBox.Text))
+            {
+                entries.Add(logEntry("Favorite Color", currentEmployee.email, favoriteColorTextBox.Text));
+                currentEmployee.favorite_color = favoriteColorTextBox.Text;
+            }
             if (startDatePicker.SelectedDate.HasValue)
             {
+                if (!currentEmployee.start_date.Equals(startDatePicker.SelectedDate.Value))
+                {
+                    entries.Add(logEntry("Start Date", currentEmployee.start_date, startDatePicker.SelectedDate.Value));
+                }
                 currentEmployee.start_date = startDatePicker.SelectedDate.Value;
             }
-
             if (endDatePicker.SelectedDate.HasValue)
             {
+                if (!currentEmployee.start_date.Equals(endDatePicker.SelectedDate.Value))
+                {
+                    entries.Add(logEntry("End Date", currentEmployee.end_date, endDatePicker.SelectedDate.Value));
+                }
                 currentEmployee.end_date = endDatePicker.SelectedDate.Value;
             }
-
-            currentEmployee.position_id = (from posi in dbContext.positions
-                                       where posi.name == positionComboBox.Text
-                                       select posi.id).First();
-
-            currentEmployee.department_id = (from dept in dbContext.departments
-                                         where dept.name == departmentComboBox.Text
-                                         select dept.id).First();
+            if (!currentEmployee.position.name.Equals(positionComboBox.Text)) 
+            {
+                entries.Add(logEntry("Position", currentEmployee.position.name, positionComboBox.Text));
+                currentEmployee.position_id = (from posi in dbContext.positions
+                                               where posi.name == positionComboBox.Text
+                                               select posi.id).First();
+            }
+            if (!currentEmployee.department.name.Equals(departmentComboBox.Text))
+            {
+                entries.Add(logEntry("Department", currentEmployee.department.name, departmentComboBox.Text));
+                currentEmployee.department_id = (from dept in dbContext.departments
+                                                 where dept.name == departmentComboBox.Text
+                                                 select dept.id).First();
+            }
 
             string mgrString = managerComboBox.Text;
             string[] parts = mgrString.Split('-');
             if (parts.Length > 1)
             {
-                currentEmployee.manager_id = Int32.Parse(parts[1].Trim());
+                int newManagerId = Int32.Parse(parts[1].Trim());
+                if (currentEmployee.manager_id != newManagerId)
+                {
+                    entries.Add(logEntry("Manager", oldManagerName, parts[0].Trim()));
+                    currentEmployee.manager_id = newManagerId;
+                }
             }
 
             int len = dbContext.employees.Local.Count();
@@ -162,7 +202,6 @@ namespace EmployeeManagement
             EmployeeDetails employeeDetails = new EmployeeDetails(currentEmployee.id);
             this.NavigationService.Navigate(employeeDetails);
         }
-
 
     }
 }

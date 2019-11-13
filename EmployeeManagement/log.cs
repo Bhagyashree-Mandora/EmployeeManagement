@@ -17,11 +17,12 @@ namespace EmployeeManagement
         public int id { get; set; }
         public System.DateTime time { get; set; }
         public string change_type { get; set; }
-        public Nullable<int> employee_id { get; set; }
+        public int employee_id { get; set; }
         public string field_name { get; set; }
         public string old_value { get; set; }
         public string new_value { get; set; }
     
         public virtual employee employee { get; set; }
+        public virtual employee employee1 { get; set; }
     }
 }

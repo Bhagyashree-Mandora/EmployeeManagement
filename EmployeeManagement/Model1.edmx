@@ -38,7 +38,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="change_type" Type="varchar" MaxLength="16" Nullable="false" />
-          <Property Name="employee_id" Type="int" />
+          <Property Name="employee_id" Type="int" Nullable="false" />
           <Property Name="field_name" Type="varchar" MaxLength="32" />
           <Property Name="old_value" Type="varchar" MaxLength="64" />
           <Property Name="new_value" Type="varchar" MaxLength="64" />
@@ -87,7 +87,21 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__logs__employee_i__628FA481">
-          <End Role="employees" Type="Self.employees" Multiplicity="0..1" />
+          <End Role="employees" Type="Self.employees" Multiplicity="1" />
+          <End Role="logs" Type="Self.logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="logs">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_employee">
+          <End Role="employees" Type="Self.employees" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="logs" Type="Self.logs" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="employees">
@@ -119,6 +133,10 @@
             <End Role="employees" EntitySet="employees" />
             <End Role="logs" EntitySet="logs" />
           </AssociationSet>
+          <AssociationSet Name="fk_employee" Association="Self.fk_employee">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="logs" EntitySet="logs" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -142,6 +160,10 @@
             <End Role="employee" EntitySet="employees" />
           </AssociationSet>
           <AssociationSet Name="FK__logs__employee_i__628FA481" Association="hrModel.FK__logs__employee_i__628FA481">
+            <End Role="employee" EntitySet="employees" />
+            <End Role="log" EntitySet="logs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_employee" Association="hrModel.fk_employee">
             <End Role="employee" EntitySet="employees" />
             <End Role="log" EntitySet="logs" />
           </AssociationSet>
@@ -177,6 +199,7 @@
           <NavigationProperty Name="employee1" Relationship="hrModel.FK__employees__manag__5629CD9C" FromRole="employee1" ToRole="employee" />
           <NavigationProperty Name="position" Relationship="hrModel.FK__employees__posit__5441852A" FromRole="employee" ToRole="position" />
           <NavigationProperty Name="logs" Relationship="hrModel.FK__logs__employee_i__628FA481" FromRole="employee" ToRole="log" />
+          <NavigationProperty Name="logs1" Relationship="hrModel.fk_employee" FromRole="employee" ToRole="log" />
         </EntityType>
         <EntityType Name="log">
           <Key>
@@ -185,11 +208,12 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="change_type" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
-          <Property Name="employee_id" Type="Int32" />
+          <Property Name="employee_id" Type="Int32" Nullable="false" />
           <Property Name="field_name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
           <Property Name="old_value" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="new_value" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="employee" Relationship="hrModel.FK__logs__employee_i__628FA481" FromRole="log" ToRole="employee" />
+          <NavigationProperty Name="employee1" Relationship="hrModel.fk_employee" FromRole="log" ToRole="employee" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -236,7 +260,21 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__logs__employee_i__628FA481">
-          <End Type="hrModel.employee" Role="employee" Multiplicity="0..1" />
+          <End Type="hrModel.employee" Role="employee" Multiplicity="1" />
+          <End Type="hrModel.log" Role="log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="log">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_employee">
+          <End Type="hrModel.employee" Role="employee" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="hrModel.log" Role="log" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="employee">

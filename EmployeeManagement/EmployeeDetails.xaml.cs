@@ -91,16 +91,6 @@ namespace EmployeeManagement
             {
                 dbContext.employees.Remove(currentEmployee);
                 dbContext.SaveChanges();
-
-                log logEntry = new log()
-                {
-                    time = System.DateTime.Now,
-                    change_type = "Delete",
-                    field_name = "Employee name",
-                    old_value = currentEmployee.name
-                };
-                dbContext.logs.Add(logEntry);
-                dbContext.SaveChanges();
             }
 
             EmployeeList employeeList = new EmployeeList();
