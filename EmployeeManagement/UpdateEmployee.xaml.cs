@@ -21,7 +21,8 @@ namespace EmployeeManagement
     public partial class UpdateEmployee : Page
     {
         hrEntities dbContext;
-        employee currEmployee;
+        employee currentEmployee;
+        List<log> UpdateLogs = new List<log>();
 
         public UpdateEmployee()
         {
@@ -30,7 +31,7 @@ namespace EmployeeManagement
 
         public UpdateEmployee(employee currEmployee, hrEntities dbContext) : this()
         {
-            this.currEmployee = currEmployee;
+            this.currentEmployee = currEmployee;
             this.dbContext = dbContext;
 
             var positionNames = from pos in dbContext.positions
@@ -55,6 +56,7 @@ namespace EmployeeManagement
             departmentComboBox.Text = currEmployee.department.name;
             shiftComboBox.Text = currEmployee.shift;
             startDatePicker.SelectedDate = currEmployee.start_date;
+            endDatePicker.SelectedDate = currEmployee.end_date;
             favoriteColorTextBox.Text = currEmployee.favorite_color;
             if (currEmployee.manager_id.HasValue)
             {
@@ -64,26 +66,57 @@ namespace EmployeeManagement
             }
         }
 
-        public void OnUpdateChangesClick(object sender, RoutedEventArgs e) 
+        private log logEntry(string field, object oldVal, object newVal)
         {
-            currEmployee.name = nameTextBox.Text;
-            currEmployee.address = addressTextBox.Text;
-            currEmployee.email = emailTextBox.Text;
-            currEmployee.phone = phoneTextBox.Text;
-            currEmployee.employment_status = employmentStatusComboBox.Text;
-            currEmployee.shift = shiftComboBox.Text;
-            currEmployee.favorite_color = favoriteColorTextBox.Text;
+            return new log()
+            {
+                employee_id = currentEmployee.id,
+                time = System.DateTime.Now,
+                change_type = "Update",
+                field_name = field,
+                old_value = oldVal.ToString(),
+                new_value = newVal.ToString(),
+            };
+        }
+
+        public void OnUpdateChangesClick(object sender, RoutedEventArgs e)
+        {
+            List<log> entries = new List<log>();
+            if (!currentEmployee.name.Equals(nameTextBox.Text))
+            {
+                entries.Add(logEntry("Name", currentEmployee.name, nameTextBox.Text));
+                currentEmployee.name = nameTextBox.Text;
+            }
+            if (!currentEmployee.address.Equals(addressTextBox.Text))
+            {
+                entries.Add(logEntry("Address", currentEmployee.address, addressTextBox.Text));
+                currentEmployee.address = addressTextBox.Text;
+            }
+            if (!currentEmployee.email.Equals(emailTextBox.Text))
+            {
+                entries.Add(logEntry("Email", currentEmployee.email, emailTextBox.Text));
+                currentEmployee.email = emailTextBox.Text;
+            }
+            currentEmployee.phone = phoneTextBox.Text;
+            currentEmployee.employment_status = employmentStatusComboBox.Text;
+            currentEmployee.shift = shiftComboBox.Text;
+            currentEmployee.favorite_color = favoriteColorTextBox.Text;
 
             if (startDatePicker.SelectedDate.HasValue)
             {
-                currEmployee.start_date = startDatePicker.SelectedDate.Value;
+                currentEmployee.start_date = startDatePicker.SelectedDate.Value;
             }
 
-            currEmployee.position_id = (from posi in dbContext.positions
+            if (endDatePicker.SelectedDate.HasValue)
+            {
+                currentEmployee.end_date = endDatePicker.SelectedDate.Value;
+            }
+
+            currentEmployee.position_id = (from posi in dbContext.positions
                                        where posi.name == positionComboBox.Text
                                        select posi.id).First();
 
-            currEmployee.department_id = (from dept in dbContext.departments
+            currentEmployee.department_id = (from dept in dbContext.departments
                                          where dept.name == departmentComboBox.Text
                                          select dept.id).First();
 
@@ -91,33 +124,45 @@ namespace EmployeeManagement
             string[] parts = mgrString.Split('-');
             if (parts.Length > 1)
             {
-                currEmployee.manager_id = Int32.Parse(parts[1].Trim());
+                currentEmployee.manager_id = Int32.Parse(parts[1].Trim());
             }
-
 
             int len = dbContext.employees.Local.Count();
             int pos = len;
 
             for (int i = 0; i < len; i++)
             {
-                if (currEmployee.id == dbContext.employees.Local[i].id)
+                if (currentEmployee.id == dbContext.employees.Local[i].id)
                 {
                     pos = i;
                     break;
                 }
             }
 
-            dbContext.employees.Local.Insert(pos, currEmployee);
+            dbContext.employees.Local.Insert(pos, currentEmployee);
             dbContext.SaveChanges();
 
-            EmployeeDetails employeeDetails = new EmployeeDetails(currEmployee.id);
+            addChangeLog(entries);
+
+            EmployeeDetails employeeDetails = new EmployeeDetails(currentEmployee.id);
             this.NavigationService.Navigate(employeeDetails);
+        }
+
+        private void addChangeLog(List<log> logEntries)
+        {
+            foreach (var entry in logEntries)
+            {
+                dbContext.logs.Add(entry);
+            }
+            dbContext.SaveChanges();
         }
 
         private void OnCancelClick(object sender, RoutedEventArgs e)
         {
-            EmployeeDetails employeeDetails = new EmployeeDetails(currEmployee.id);
+            EmployeeDetails employeeDetails = new EmployeeDetails(currentEmployee.id);
             this.NavigationService.Navigate(employeeDetails);
         }
+
+
     }
 }

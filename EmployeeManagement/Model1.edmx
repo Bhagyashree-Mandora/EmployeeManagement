@@ -31,6 +31,18 @@
           <Property Name="favorite_color" Type="varchar" MaxLength="16" />
           <Property Name="photo" Type="image" />
         </EntityType>
+        <EntityType Name="logs">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="employee_id" Type="int" />
+          <Property Name="field_name" Type="varchar" MaxLength="32" />
+          <Property Name="old_value" Type="varchar" MaxLength="64" />
+          <Property Name="new_value" Type="varchar" MaxLength="64" />
+        </EntityType>
         <EntityType Name="positions">
           <Key>
             <PropertyRef Name="id" />
@@ -74,9 +86,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__logs__employee_i__628FA481">
+          <End Role="employees" Type="Self.employees" Multiplicity="0..1" />
+          <End Role="logs" Type="Self.logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="logs">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="hrModelStoreContainer">
           <EntitySet Name="departments" EntityType="Self.departments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="employees" EntityType="Self.employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="logs" EntityType="Self.logs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="positions" EntityType="Self.positions" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__employees__depar__5535A963" Association="Self.FK__employees__depar__5535A963">
             <End Role="departments" EntitySet="departments" />
@@ -90,6 +115,10 @@
             <End Role="positions" EntitySet="positions" />
             <End Role="employees" EntitySet="employees" />
           </AssociationSet>
+          <AssociationSet Name="FK__logs__employee_i__628FA481" Association="Self.FK__logs__employee_i__628FA481">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="logs" EntitySet="logs" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -98,6 +127,7 @@
         <EntityContainer Name="hrEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="departments" EntityType="hrModel.department" />
           <EntitySet Name="employees" EntityType="hrModel.employee" />
+          <EntitySet Name="logs" EntityType="hrModel.log" />
           <EntitySet Name="positions" EntityType="hrModel.position" />
           <AssociationSet Name="FK__employees__depar__5535A963" Association="hrModel.FK__employees__depar__5535A963">
             <End Role="department" EntitySet="departments" />
@@ -110,6 +140,10 @@
           <AssociationSet Name="FK__employees__posit__5441852A" Association="hrModel.FK__employees__posit__5441852A">
             <End Role="position" EntitySet="positions" />
             <End Role="employee" EntitySet="employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__logs__employee_i__628FA481" Association="hrModel.FK__logs__employee_i__628FA481">
+            <End Role="employee" EntitySet="employees" />
+            <End Role="log" EntitySet="logs" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="department">
@@ -142,6 +176,20 @@
           <NavigationProperty Name="employees1" Relationship="hrModel.FK__employees__manag__5629CD9C" FromRole="employee" ToRole="employee1" />
           <NavigationProperty Name="employee1" Relationship="hrModel.FK__employees__manag__5629CD9C" FromRole="employee1" ToRole="employee" />
           <NavigationProperty Name="position" Relationship="hrModel.FK__employees__posit__5441852A" FromRole="employee" ToRole="position" />
+          <NavigationProperty Name="logs" Relationship="hrModel.FK__logs__employee_i__628FA481" FromRole="employee" ToRole="log" />
+        </EntityType>
+        <EntityType Name="log">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="change_type" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="employee_id" Type="Int32" />
+          <Property Name="field_name" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="old_value" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="new_value" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="employee" Relationship="hrModel.FK__logs__employee_i__628FA481" FromRole="log" ToRole="employee" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -187,6 +235,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__logs__employee_i__628FA481">
+          <End Type="hrModel.employee" Role="employee" Multiplicity="0..1" />
+          <End Type="hrModel.log" Role="log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="log">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -217,6 +277,19 @@
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logs">
+            <EntityTypeMapping TypeName="hrModel.log">
+              <MappingFragment StoreEntitySet="logs">
+                <ScalarProperty Name="new_value" ColumnName="new_value" />
+                <ScalarProperty Name="old_value" ColumnName="old_value" />
+                <ScalarProperty Name="field_name" ColumnName="field_name" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

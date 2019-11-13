@@ -55,6 +55,7 @@ namespace EmployeeManagement
             shiftLabel.Content = currentEmployee.shift;
             managerLabel.Content = managerName;
             startDateLabel.Content = currentEmployee.start_date;
+            endDateLabel.Content = currentEmployee.end_date;
             employmentStatusLabel.Content = currentEmployee.employment_status;
             favoriteColorLabel.Content = currentEmployee.favorite_color;
         }
@@ -90,10 +91,26 @@ namespace EmployeeManagement
             {
                 dbContext.employees.Remove(currentEmployee);
                 dbContext.SaveChanges();
+
+                log logEntry = new log()
+                {
+                    time = System.DateTime.Now,
+                    change_type = "Delete",
+                    field_name = "Employee name",
+                    old_value = currentEmployee.name
+                };
+                dbContext.logs.Add(logEntry);
+                dbContext.SaveChanges();
             }
 
             EmployeeList employeeList = new EmployeeList();
             this.NavigationService.Navigate(employeeList);
+        }
+
+        private void OnViewActivityClick(object sender, RoutedEventArgs e)
+        {
+            ActivityLog activityLogPage = new ActivityLog(currentEmployee, dbContext);
+            this.NavigationService.Navigate(activityLogPage);
         }
     }
 }

@@ -125,8 +125,19 @@ namespace EmployeeManagement
             //}
 
             dbContext.employees.Add(newEmployee);
-            MessageBox.Show("Employee " + newEmployee.name + " added!");
             dbContext.SaveChanges();
+
+            log logEntry = new log()
+            {
+                time = System.DateTime.Now,
+                change_type = "Create",
+                employee_id = newEmployee.id,
+                field_name = "Employee name",
+                new_value = newEmployee.name
+            };
+            dbContext.logs.Add(logEntry);
+            dbContext.SaveChanges();
+            MessageBox.Show("Employee " + newEmployee.name + " added!");
 
             HomePage homePage = new HomePage();
             this.NavigationService.Navigate(homePage);

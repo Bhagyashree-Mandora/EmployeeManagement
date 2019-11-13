@@ -27,6 +27,7 @@ namespace EmployeeManagement
     
         public virtual DbSet<department> departments { get; set; }
         public virtual DbSet<employee> employees { get; set; }
+        public virtual DbSet<log> logs { get; set; }
         public virtual DbSet<position> positions { get; set; }
     }
 }

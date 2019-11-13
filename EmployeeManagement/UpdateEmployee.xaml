@@ -34,6 +34,7 @@
                 <RowDefinition Height="25" />
                 <RowDefinition Height="25" />
                 <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
             </Grid.RowDefinitions>
 
             <Label Grid.Row="1" Grid.Column="0" >Name:</Label>
@@ -58,13 +59,15 @@
             <ComboBox Grid.Row="8" Grid.Column="1" Name="managerComboBox" />
             <Label Grid.Row="9" Grid.Column="0">Start Date:</Label>
             <DatePicker Grid.Row="9" Grid.Column="1" Name="startDatePicker" />
-            <Label Grid.Row="10" Grid.Column="0">Employment Status:</Label>
-            <ComboBox Grid.Row="10" Grid.Column="1" Name="employmentStatusComboBox">
+            <Label Grid.Row="10" Grid.Column="0">End Date:</Label>
+            <DatePicker Grid.Row="10" Grid.Column="1" Name="endDatePicker" />
+            <Label Grid.Row="11" Grid.Column="0">Employment Status:</Label>
+            <ComboBox Grid.Row="11" Grid.Column="1" Name="employmentStatusComboBox">
                 <ComboBoxItem>Employed</ComboBoxItem>
                 <ComboBoxItem>Terminated</ComboBoxItem>
             </ComboBox>
-            <Label Grid.Row="11" Grid.Column="0">Favorite Color:</Label>
-            <TextBox Grid.Row="11" Grid.Column="1" Name="favoriteColorTextBox" />
+            <Label Grid.Row="12" Grid.Column="0">Favorite Color:</Label>
+            <TextBox Grid.Row="12" Grid.Column="1" Name="favoriteColorTextBox" />
 
         </Grid>
 
