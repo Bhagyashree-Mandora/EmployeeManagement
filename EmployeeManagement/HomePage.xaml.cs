@@ -36,5 +36,12 @@ namespace EmployeeManagement
             AddEmployee addEmployee = new AddEmployee();
             this.NavigationService.Navigate(addEmployee);
         }
+
+        private void OnStatsClick(object sender, RoutedEventArgs e)
+        {
+            Reporting reportingPage = new Reporting();
+            this.NavigationService.Navigate(reportingPage);
+        }
+
     }
 }

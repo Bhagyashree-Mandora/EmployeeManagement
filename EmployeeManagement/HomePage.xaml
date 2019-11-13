@@ -9,8 +9,8 @@
       Title="HomePage">
 
     <Grid>
-        <Button Content="Add Employee" HorizontalAlignment="Left" Margin="540,36,0,0" VerticalAlignment="Top" Width="111" Click="OnAddClick_home"/>
-        <Button Content="View Employees" HorizontalAlignment="Left" Margin="540,119,0,0" VerticalAlignment="Top" Width="111" Click="OnViewClick"/>
-
+        <Button Content="Add Employee" HorizontalAlignment="Left" Margin="60,50,0,0" VerticalAlignment="Top" Width="111" Click="OnAddClick_home"/>
+        <Button Content="View Employees" HorizontalAlignment="Left" Margin="60,100,0,0" VerticalAlignment="Top" Width="111" Click="OnViewClick"/>
+        <Button Content="Recruiting Stats" HorizontalAlignment="Left" Margin="60,150,0,0" VerticalAlignment="Top" Width="111" Click="OnStatsClick"/>
     </Grid>
 </Page>
